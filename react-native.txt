@@ -1,6 +1,6 @@
 =======================Estrutura básica==============================
 
-//Example 1
+//Example 1 - Estrutura Base de um componente react
     import React, { Component } from 'react';
     import { View, Text } from 'react-native';
 
@@ -8,17 +8,19 @@
     export default class app extends Component {
     //Dentro de todo componente temos um método render que retorna valores
     render() {
+        const nome = 'Matheus'
+
         //Return é uma função
         return(
-        <View style={estilo.container}>
-            <Text style={estilo.txt}>Olá, mundo!</Text>
+        <View style={style.container}>
+            <Text style={style.txt}>Meu nome é: {nome} </Text>
         </View>
         );
     };
     }
 
     //Style
-    const estilo = {
+    const style = {
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -28,3 +30,227 @@
         fontSize: 38
     }
     }
+
+//Example 2 - Chamando métodos e funções no JSX:
+    //Class View
+    export default class app extends Component {
+    
+    //Método somar
+    static somar(n1, n2){
+        return n1 + n2;
+    }
+    
+    render() {
+        
+        const nome = 'Matheus Rodrigues';
+        const somar = (n1, n2) => 
+        {
+        return n1 + n2;
+        }
+
+        //Chamamos o método estático da nossa classe
+        return(
+        <View style={stylesheet.container}>
+            <Text style={stylesheet.txt}>A soma entre 2 + 2 é {app.somar(2,2)} </Text>
+        </View>
+        );
+
+    };
+    }
+
+
+=======================PROPS (Propriedades)==============================
+//Example 1
+  render() 
+  {
+    //Props são as propiedades dos nosso componentes de view JSX
+    //Por exemplo o Style sendo utilizado abaixo é uma PROP (Propriedade)
+    return(
+      <View style={stylesheet.container}>
+        <Text style={{fontSize: 25, color: 'blue'}}>Olá Matheus</Text>
+      </View>
+      );
+    };
+  }
+
+//Example 2 - Image
+    import React, { Component } from 'react';
+    import { View, Text, Image, Button } from 'react-native';
+
+    export default class app extends Component {
+    render() 
+    {
+        return(
+        <View style={styleSheet.container}>
+            <Text style={{fontSize: 25, color: 'gray', margin:20}}>Sasuke Uchiha</Text>
+            <Image source={src.srcImg} style={styleSheet.img}/>
+            <Button title='Clicke aqui para conversar com Sasuke' color='red' onPress={()=>alert('Olá, meu nome é Sasuke Uchiha, sou da aldeia da folha. Prazer em conhece-lo, Matheus!')}></Button>
+        </View>
+        );
+        };
+    }
+
+    //Source
+    const src = {
+    srcImg: {
+        uri: 'https://i.pinimg.com/564x/50/95/d7/5095d7fc7b7893183493762802b3f601.jpg'
+    },
+    }
+
+    //Style
+    const styleSheet = {
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black'
+    },
+    txt: {
+        fontSize: 30,
+    },
+    button: {
+        marginTop: 20,
+        borderRadius: 20,
+        backgroundColor: 'red'
+    },
+    img: {
+        width: 300,
+        height: 300,
+        borderRadius: 50,
+        marginBottom: 20
+    }
+    }
+
+//Example 3 - Criando componentes e inserindo Propriedades
+    import React, { Component } from 'react';
+    import { View, Text, Image } from 'react-native';
+
+    class SasukeImg extends Component{
+    render()
+    {
+
+        const img = {
+        src: {
+            uri: 'https://i.pinimg.com/564x/50/95/d7/5095d7fc7b7893183493762802b3f601.jpg'
+        },
+        //O this.props.NOME_DA_PROPRIEDADE cria uma nova propriedade para o nosso componente, ou seja, a nossa classe SasukeImg 
+        style: {
+            width: parseInt(this.props.width),
+            height: parseInt(this.props.height),
+        }
+        }
+
+        return(
+        <Image source={img.src} style={img.style}/>
+        );
+
+    }
+    }
+
+    //Componente principal
+    export default class app extends Component {
+    render() 
+    {
+        //Criamos o component SasukeImg
+        return(
+        <View style={styleSheet.container}>
+            <Text style={styleSheet.txt}>Sasuke Uchiha</Text>
+            <SasukeImg width='380' height='300' />
+        </View>
+        );
+
+    };
+    }
+
+    //Style
+    const styleSheet = {
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black'
+    },
+    txt: {
+        fontSize: 30,
+        color: 'white'
+    },
+    }
+
+=======================States (Estado)==============================
+
+//Example 1 - States dinâmicos
+    import React, { Component } from 'react';
+    import { View, Text } from 'react-native';
+
+    //Component
+    class Janta extends Component {
+    
+    //State é definido no constructor (Algo variável e não estático)
+    constructor(props){
+
+        super(props);
+
+        this.state = {
+        comida: '',
+        message: () =>{
+            alert('Função do state executada!');
+        }
+        }
+
+        let comidas = ['Pizza', 'Lasanha', 'Burger', 'Sopa', 'Arroz'];
+
+        setInterval(() => {
+
+        //Modificando um state com o setState
+        this.setState((previousState) => {
+            let randomNumber = Math.floor(Math.random() * comidas.length);
+            return { comida: comidas[randomNumber] }
+        })
+
+        }, 1000);
+
+    }
+
+    render() {
+
+        //Style
+        const style = {
+        text: {
+            textAlign: 'center',
+            fontWight: 'bold',
+            paddingTop: 30,
+            fontSize: 20,
+            color: 'red'
+        },
+        textFood: {
+            textAlign: 'center',
+            fontSize: 18,
+        }
+
+        }
+
+        //View
+        return(
+        <View>
+            <Text style={ style.text }>Hoje você vai jantar: </Text>
+            <Text style={ style.textFood }>{ this.state.comida }</Text>
+        </View>
+        );
+        
+    }
+    }
+
+    //App
+    export default class app extends Component {
+    render() 
+    {
+        return(
+        <View>
+            <Janta/>
+        </View>
+        );
+    };
+    }
+
+
+
