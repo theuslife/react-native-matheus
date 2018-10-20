@@ -1,0 +1,19 @@
+==Init Requiriments===
+- Chocolatey
+- Node
+- Python 2
+- JDK 8 (Java developer kit)
+- React Native CLI 
+- Android Studio
+
+===NPM===
+npm install -g react-native-cli
+
+===Expo==
+npm install -g react-native-app
+
+create-react-native-app NOME_PROJETO
+
+npm start
+
+

@@ -1,0 +1,30 @@
+=======================Estrutura básica==============================
+
+//Example 1
+    import React, { Component } from 'react';
+    import { View, Text } from 'react-native';
+
+    //View
+    export default class app extends Component {
+    //Dentro de todo componente temos um método render que retorna valores
+    render() {
+        //Return é uma função
+        return(
+        <View style={estilo.container}>
+            <Text style={estilo.txt}>Olá, mundo!</Text>
+        </View>
+        );
+    };
+    }
+
+    //Style
+    const estilo = {
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    txt: {
+        fontSize: 38
+    }
+    }
