@@ -200,7 +200,6 @@
         let comidas = ['Pizza', 'Lasanha', 'Burger', 'Sopa', 'Arroz'];
 
         setInterval(() => {
-
         //Modificando um state com o setState
         this.setState((previousState) => {
             let randomNumber = Math.floor(Math.random() * comidas.length);
@@ -217,7 +216,6 @@
         const style = {
         text: {
             textAlign: 'center',
-            fontWight: 'bold',
             paddingTop: 30,
             fontSize: 20,
             color: 'red'
@@ -250,7 +248,269 @@
         </View>
         );
     };
+}
+
+=======================Styles==============================
+
+//Example 1:
+    import React, { Component } from 'react';
+    import { View, Text, StyleSheet } from 'react-native';
+
+    export default class app extends Component {
+    render(){
+        //Adicionando mais de um estilo (Terceiro Text). Um vai sobrescrever o outro caso tenha modificações nas mesmas propriedades
+        return(
+        <View style={{paddingTop: 50}}>
+            <Text style={styles.bigBlue}>Blue!</Text>
+            <Text style={styles.red}>Red!</Text>
+            <Text style={[styles.bigBlue, styles.red]}>Big red and in the center!</Text>
+        </View>
+        );
     }
+    }
+
+    const styles = StyleSheet.create({
+    bigBlue: {
+        color: '#0000FF',
+        fontSize: 30,
+        textAlign: 'center'
+    },
+    red: {
+        color: '#FF0000',
+    }
+
+    });
+
+//Example 2: Flebox column
+    import React, { Component } from 'react';
+    import { View, Text } from 'react-native';
+
+    export default class app extends Component {
+    render(){
+        //Flexbox (Fléxivel)
+        return(
+        <View style={{flex: 1, backgroundColor: 'black'}}>
+            <View style={{height: 70, backgroundColor: 'white'}}></View>
+            <View style={{flex: 1, backgroundColor: 'blue'}}></View>
+            <View style={{height: 70, backgroundColor: 'black'}}></View>
+        </View>
+        );
+    }
+    }
+
+//Example 3: Flexbox e alinhamento de itens
+
+    /*
+
+    O justifyContent alinhará os itens de acordo com o FlexDirection
+    (Coluna ou linha). Enquanto o alignItems irá alinhar os itens na 
+    direção contrária, ou seja se o flexDirection for 'Row' o alignItens
+    irá mover o conteúdo no sentido da coluna.
+
+    JustifyContent has 'flex-start', 'center','flex-end', 'space-between' and 'space-around'
+
+    alignitems has 'flex-start', 'center' and 'flex-end'
+
+    */
+
+    import React, { Component } from 'react';
+    import { View, Text } from 'react-native';
+
+    export default class app extends Component {
+    render(){
+            return(
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: 'black'}}>
+                <View style={{width:400, height: 400, backgroundColor:'purple', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{width: 200, height: 200, backgroundColor: 'black', flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+                    <Text style={{color: 'purple', fontSize: 18}}>xTheus</Text>
+                </View>
+                </View>
+            </View>
+            );
+        }
+    }
+
+=======================Eventos==============================
+
+//Example 1: Argumentos de Eventos
+    import React, { Component } from 'react';
+    import { View, Text, TextInput, StyleSheet } from 'react-native';
+
+    export default class app extends Component {
+    
+    //State
+    constructor(props)
+    {
+        super(props);
+        this.state = {name: ''}
+        
+        //Bind irá fazer com que nossos métodos enxeguem o state e as props
+        this.changeName = this.changeName.bind(this);
+    }
+    
+    //Method
+    changeName(name)
+    {
+        const state = this.state;
+
+        (name.length > 0)? state.name = `Olá: ${name}`:state.name = '';
+
+        this.setState(state);
+    }
+
+    //View
+    render(){
+        return(
+        <View style={styles.centerView}>
+            <TextInput style={styles.input} underlineColorAndroid='transparent' placeholder='Digite seu nome' onChangeText={this.changeName}></TextInput>
+            <Text style={styles.txt}>{this.state.name}</Text>
+        </View>
+        );
+    }
+
+    }
+
+    //Style
+    const styles = StyleSheet.create({
+
+    centerView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    txt: {
+        fontSize: 24
+    },
+
+    input: {
+        height:60,
+        borderRadius: 10,
+        backgroundColor: 'gray',
+        width: 350,
+        padding: 10,
+        marginBottom: 10
+    }
+
+    });
+
+//Example 2:
+    import React, { Component } from 'react';
+    import { View, Alert, Button, StyleSheet } from 'react-native';
+
+    export default class app extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+        apertouBotao: () => {
+            Alert.alert('Você apertou o botão')
+        }  
+        }
+    }
+
+    //View
+    render(){
+        return(
+        <View style={styles.centerView}>
+            <Button title='Aperte em mim' onPress={this.state.apertouBotao}></Button>
+        </View>
+        );
+    }
+
+    }
+
+    //Style
+    const styles = StyleSheet.create({
+
+    centerView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    txt: {
+        fontSize: 24
+    },
+
+
+    });
+
+//Example 3:
+    import React, { Component } from 'react';
+    import { View, Button, StyleSheet, TextInput, Text } from 'react-native';
+
+    export default class app extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            name: '',
+            temporaryName: ''
+        }
+
+        //Método foi referenciado
+        this.changeName = this.changeName.bind(this);
+        this.putName = this.putName.bind(this);
+
+    }
+
+    changeName(name){
+        const state = this.state;
+        console.log(state);
+        (name.length > 0)? state.temporaryName = name:state.temporaryName = 'Digite algo no campo de inserir nome';   
+        this.setState(state);
+    }
+
+    putName()
+    {
+        const state = this.state;
+        state.name = state.temporaryName;
+        this.setState(state);
+    }
+
+    //View
+    render(){
+        return(
+        <View style={styles.centerView}>
+            <Text style={styles.txt}>{this.state.name}</Text>
+            <TextInput style={styles.input} placeholder='Digite seu nome' onChangeText={(this.changeName)}></TextInput>
+            <Button title='Mensagem de boas vindas' onPress={this.putName}></Button>
+        </View>
+        );
+    }
+
+    }
+
+    //Style
+    const styles = StyleSheet.create({
+
+    centerView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#403A39',
+    },
+
+    txt: {
+        fontSize: 16,
+        color: 'white',
+    },
+
+    input: {
+    height:40,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    width: 350,
+    padding: 10,
+    marginBottom: 10,
+    marginTop: 10
+    }
+
+    });
+
+
+
 
 
 
