@@ -509,6 +509,120 @@
 
     });
 
+=======================Componente de botão personalizado==============================
+
+//Example 1:
+        class Botao extends Component {
+
+        constructor(props){
+            super(props);
+            this.state = {};
+            this.css = StyleSheet.create({
+            botao: {
+                width: 250,
+                height: 50,
+                borderWidth: 2,
+                borderRadius: 25,
+                borderColor: '#87CEEB',
+                backgroundColor: 'transparent'
+            },
+            botaoArea: {
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center'
+            },
+            botaoTxt: {
+                fontWeight: 'bold',
+                fontSize: 16,
+                color: '#87CEEB'
+            }
+            });
+        }
+
+        render(){
+            return(
+            <TouchableOpacity onPress={() => {alert('Eu falei :)')}} style={this.css.botao}>
+                <View style={this.css.botaoArea}>
+                <Text style={this.css.botaoTxt}> Eu sou um botão sabia: :o</Text>
+                </View>
+            </TouchableOpacity>
+            );
+        }
+
+        }
+=======================Scroll View==============================
+
+//Example 1:
+        import React from 'react';
+        import { StyleSheet, Text, View, ScrollView } from 'react-native';
+
+        export default class App extends React.Component {
+        render() {
+            //ScrollView vai permitir o deslize de dedo para ver mais elementos em tela
+            //Este tipo de Scroll carrega tudo que estiver contido nele, portanto não é bom usa-lo quando o carregamento são grandes cargas de dados
+            return (
+            <View style={styles.container}>
+                <ScrollView>
+                    <View style={styles.firstSquare}></View>
+                    <View style={styles.secondSquare}></View>
+                    <View style={styles.firstSquare}></View>
+                    <View style={styles.secondSquare}></View>
+                </ScrollView>
+            </View>
+            );
+        }
+        }
+
+        const styles = StyleSheet.create({
+        container: {
+            paddingTop: 20
+        },
+        firstSquare: {
+            flex: 1,
+            backgroundColor: 'black',
+            height: 200,
+        },
+        secondSquare: {
+            flex: 1,
+            height: 200,
+            backgroundColor: 'gray'
+        }
+        });
+
+//Example 2:
+        export default class App extends React.Component {
+        render() {
+            //Somente os elementos dentro do escopo do ScrollView terá a interação deste componente
+            return (
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <Text style={{color: 'white', textAlign: 'center'}}>Olá mundo</Text>
+                </View>
+
+                <ScrollView>
+                    <View style={styles.firstSquare}></View>
+                    <View style={styles.secondSquare}></View>
+                    <View style={styles.firstSquare}></View>
+                    <View style={styles.secondSquare}></View>
+                    <View style={styles.firstSquare}></View>
+                    <View style={styles.secondSquare}></View>
+                    <View style={styles.firstSquare}></View>
+                    <View style={styles.secondSquare}></View>
+                    <View style={styles.firstSquare}></View>
+                    <View style={styles.secondSquare}></View>
+                    <View style={styles.firstSquare}></View>
+                    <View style={styles.secondSquare}></View>
+                </ScrollView>
+            </View>
+            );
+        }
+        }
+=======================Flast list==============================
+
+//Example 1: 
+
+
 
 
 
