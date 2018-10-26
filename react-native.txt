@@ -620,11 +620,227 @@
         }
 =======================Flast list==============================
 
+//Flast List carrega somente os itens que estão em tela e não todos os dados.
+//Conforme vai rolando o Flast list atualiza os novos dados em tempo real
+
 //Example 1: 
 
+    import React from 'react';
+    import { StyleSheet, Text, View, FlatList } from 'react-native';
+
+    export default class App extends React.Component {
+    
+    constructor(props){
+        super(props);
+        this.state = {
+        flatData: [
+            {key: '1', nome: 'Matheus Rodrigues', idade: '20'},
+            {key: '2', nome: 'Lorivaldo Pires', idade: '48'},
+            {key: '3', nome: 'Maria Valeria', idade: '38'},
+            {key: '4', nome: 'Thalia Rodrigues', idade: '8'},
+            {key: '5', nome: 'Maria do Carmo', idade: '68'}
+        ]
+        }
+    }
+
+    //O que irá renderizar o nosso FlatList
+    flatRender(item){
+        return(
+            <Text style={styles.txt}>{item.nome}, {item.idade} anos</Text>
+        );
+    }
+
+    render() {
+        //Flat list absorve os dados e diz através da propriedade o que irá executar
+        return (
+        <View style={styles.body}>
+            <FlatList data={this.state.flatData}  renderItem={({item}) => {return this.flatRender(item)} } />
+        </View>
+        );
+    }
+    }
+
+    const styles = StyleSheet.create({
+    body: {
+        flex: 1,
+        paddingTop: 20
+    },
+    txt: {
+        fontSize: 18,
+        padding: 10
+    }
+    });
+
+=======================SectionList==============================
+
+/*
+
+    SectionList são um FlatList com uma especialização a mais
+    É como a lista de contatos no celular. Temos lista de nomes somente com A,B,C,D etc...
+    O sectionList permite esta funcionalidade de separação de cada item renderizado em tela
+
+*/
 
 
+//Example 1:
+        import React from 'react';
+        import { StyleSheet, Text, View, SectionList} from 'react-native';
+
+        export default class App extends React.Component {
+        
+        constructor(props){
+            super(props);
+            this.state = {
+            listData: [
+                {title: 'A', data: [
+                {key: '1', nome: 'Alicia', idade: 8},
+                {key: '2', nome: 'Amanda', idade: 23},
+                {key: '3', nome: 'Alisson', idade: 17}
+                ]},
+                {title: 'B', data: [
+                {key: '4', nome: 'Barbara', idade: 4},
+                {key: '5', nome: 'Belamina', idade: 30},
+                {key: '6', nome: 'Bruna', idade: 17}
+                ]},
+                {title: 'C', data: [
+                {key: '7', nome: 'Carolina', idade: 16},
+                {key: '8', nome: 'Carol', idade: 45},
+                {key: '9', nome: 'Carina', idade: 19}
+                ]},
+                {title: 'D', data: [
+                {key: '10', nome: 'Dante', idade: 8},
+                {key: '11', nome: 'Daniel', idade: 23},
+                {key: '12', nome: 'Dervesson', idade: 17}
+                ]},
+                {title: 'E', data: [
+                {key: '13', nome: 'Escanor', idade: 42},
+                {key: '14', nome: 'Eric', idade: 26},
+                {key: '15', nome: 'Ecko', idade: 15}
+                ]},
+                {title: 'M', data: [
+                {key: '16', nome: 'Matheus', idade: 20},
+                {key: '17', nome: 'Maria', idade: 19},
+                {key: '18', nome: 'Merlin', idade: 300}
+                ]},
+            ]
+            }
+        }
+
+        listRender(item){
+            return(
+            <Text style={styles.listItem}>{item.nome}, {item.idade} anos</Text>
+            );
+        }
+
+        listSectionRender(item){
+            return(
+            <Text style={styles.listHeader}>{item.title}</Text>
+            );
+        }
+
+        render() {
+            //Flat list absorve os dados e diz através da propriedade o que irá executar
+            return (
+            <View style={styles.body}>
+                <SectionList sections={this.state.listData} renderItem={({item}) => {return this.listRender(item)}} renderSectionHeader={({section}) => {return this.listSectionRender(section)}} ></SectionList>
+            </View>
+            );
+        }
+        }
+
+        const styles = StyleSheet.create({
+        body: {
+            flex: 1,
+            paddingTop: 20
+        },
+        listItem: {
+            padding: 10,
+            fontSize: 15
+        },
+        listHeader: {
+            backgroundColor: '#E0E0E0',
+            padding: 10,
+            fontSize: 18
+        }
+        });
+
+=======================Picker==============================
 
 
+ /*
+ 
+    Picker no Android é como um dropbown, no qual selecionamos um item
+
+ */
+
+ //Example 1:
+        import React, { Component } from 'react';
+        import { StyleSheet, Text, View, Picker } from 'react-native';
+
+        export default class App extends Component {
+
+        constructor(props){
+            super(props);
+            this.state = {
+            //Zero, pois o nosso array começa neste indice
+            servico: 0,
+            //Nosso array de objetos
+            servicos: [
+                {nome: 'Alinhamento', valor: 30},
+                {nome: 'Balanceamento', valor: 20},
+                {nome: 'Rodizio de Pneus', valor: 50},
+                {nome: 'Test drive', valor: 10},
+            ]
+            }
+        }
+
+        render() {
+
+            //Variável que recebe o nosso state de serviços e retorna um Picker selecionado
+            let servicosItems = this.state.servicos.map((element, index) => {
+                return (<Picker.Item key = {index} value={index} label={element.nome} />)
+            })
+
+            //Picker no Android é como um dropbown, no qual selecionamos um item
+            return (
+            <View style={styles.body}>
+
+                <Text style={ styles.logo } >Autopeças Matheus</Text> 
+
+                <Picker selectedValue={ this.state.servico } onValueChange={  (itemValue, itemIndex) => this.setState({servico: itemValue})  }>
+                        {servicosItems}
+                </Picker>
+
+                <Text style={styles.txt}>R${this.state.servicos[this.state.servico].valor}</Text>
+
+            </View>
+            );
+        }
+        }
+
+        const styles = StyleSheet.create({
+        body: {
+            flex: 1,
+            paddingTop: 20,
+            backgroundColor: '#E0E0E0'
+        },
+        logo: {
+            fontSize: 30,
+            textAlign: 'center'
+        },
+        txt: {
+            textAlign: 'center',
+            fontSize: 30,
+            marginTop: 20
+        }
+        });
+
+=======================Switch==============================
+
+/*
 
 
+*/
+
+
+//Example 1:
