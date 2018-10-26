@@ -839,8 +839,129 @@
 
 /*
 
+    Switch é um botão como um comboBox mas para os dispositíveis móveis
 
 */
 
 
 //Example 1:
+        import React, { Component } from 'react';
+        import { View, Text, StyleSheet, Switch } from 'react-native';
+
+        export default class app extends Component {
+
+        constructor(props){
+            super(props);
+            this.state = {
+            value: false
+            }
+        }
+
+        render(){
+            return(
+            <View style={css.body}>
+                <Switch value={this.state.value} onValueChange={(newValue) => this.setState({value: newValue})} />
+                <Text>{(this.state.value.toString())?'Selecionado':'Não Selecionado'}</Text>
+            </View>
+            );
+        }
+
+        }
+
+        const css = StyleSheet.create({
+        body: {
+            flex: 1,
+            padding: 20,
+            alignItems: 'center',
+            justifyContent: 'center'
+        }
+
+        });
+
+=======================Project RGB==============================
+            import React, { Component } from 'react';
+            import { View, Text, StyleSheet, Slider } from 'react-native';
+
+            export default class app extends Component {
+
+            constructor(props){
+
+                super(props);
+                this.state = {
+                blue: 75,
+                green: 0,
+                red: 0,
+                backgroundColor: () => {
+                    return `rgba(${this.state.red}, ${this.state.green}, ${this.state.blue}, 1)`
+                }
+                }
+
+                this.css = StyleSheet.create({
+                    body: {
+                    flex: 1,
+                    paddingTop: 20,
+                    },
+                    sliderDiv: {
+                    flex: 1,
+                    justifyContent: 'center'
+                    },
+                    imageDiv: {
+                    flex: 1,
+                    backgroundColor: this.backgroundColor(this.state.red, this.state.green, this.state.blue)
+                    },
+                    slider: {
+                    margin: 10
+                    }
+                })
+
+                this.configColors = this.configColors.bind(this);
+
+            }
+
+            backgroundColor (red, green, blue){
+                return `rgba(${red}, ${green}, ${blue}, 1)`;
+            }
+
+            configColors(newValue, typeColor){
+
+                let state = this.state;
+                if(typeColor == 'red'){
+                state.red = newValue
+                } else if (typeColor == 'green'){
+                state.green = newValue
+                } else if (typeColor == 'blue'){
+                state.blue = newValue
+                } 
+
+                this.backgroundColor(state.red, state.green, state.blue);
+
+                this.setState(state);
+                console.log(state);
+                
+            }
+
+            render(){
+                return(
+                <View style={this.css.body}>
+
+                    <Text style={{textAlign: 'center', fontSize: 18, marginTop: 5}}>RGB Colors</Text>
+
+                    <View style={this.css.sliderDiv}>
+
+                        <Slider style={ this.css.slider } value={this.state.red} minimumValue={0} maximumValue={255} onValueChange={(newValue) => { this.configColors(newValue, 'red') }}/>
+
+                        <Slider style={ this.css.slider } value={this.state.green} minimumValue={0} maximumValue={255} onValueChange={(newValue) => { this.configColors(newValue, 'green') } } />
+
+                        <Slider style={ this.css.slider } value={this.state.blue} minimumValue={0} maximumValue={255} onValueChange={(newValue) => { this.configColors(newValue, 'blue') }} />
+
+                    </View>
+
+                    <View style={this.css.imageDiv}>
+
+                    </View>
+
+                </View>
+                );
+            }
+
+            }
