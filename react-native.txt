@@ -878,90 +878,297 @@
 
         });
 
+=======================Modal==============================
+
+//Example 1:
+        import React, { Component } from 'react';
+        import { View, Text, StyleSheet, Modal, Button } from 'react-native';
+
+        export default class app extends Component {
+
+        constructor(props){
+            super(props);
+            this.state = {
+            modalVisible: false
+            }
+
+            this.openModal = this.openModal.bind(this);
+            this.closeModal = this.closeModal.bind(this);
+
+        }
+
+        openModal(){
+            let state = this.state;
+            state.modalVisible = true;
+            this.setState(state);
+        }
+
+        closeModal(){
+            let state = this.state;
+            state.modalVisible = false;
+            this.setState(state);
+        }
+
+        //O modal possue sua própria View para comportamento e estilo
+        render(){
+            return(
+            <View style={css.body}>
+                <Modal animationType='slide' visible={this.state.modalVisible}>
+                    <View style={css.modal}>
+                        <Text>Teste 123</Text>
+                        <Button title='Fechar modal' onPress={this.closeModal}></Button>
+                    </View>
+                </Modal>
+                <Button title='Abrir modal' onPress={this.openModal}></Button>
+            </View>
+            );
+        }
+
+        }
+
+        const css = StyleSheet.create({
+        body: {
+            flex: 1,
+            padding: 20,
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        modal: {
+            flex: 1,
+            backgroundColor: '#E0E0E0',
+            alignItems: 'center',
+            padding: 40
+        }
+
+        })
+
+
+=======================StatusBar==============================
+
+/*
+    StatusBar é os componentes no topo do smartphone (Hora, batéria etc...). 
+    Portanto conseguimos manipular certas funções do StatusBar através do Native
+*/
+
+//Example 1:
+
+        import React, { Component } from 'react';
+        import { View, StyleSheet, Button, StatusBar} from 'react-native';
+
+        export default class app extends Component {
+
+        constructor(props){
+            super(props);
+            this.state = {
+            statusStyle = ''
+            }
+        }
+
+        modify(){
+            
+        }
+
+        //
+        render(){
+            return(
+            <View style={css.body}>
+                <StatusBar barStyle={this.state.statusStyle} />
+                <Button title='Alternar' onPress={this.modify}></Button>
+            </View>
+            );
+        }
+
+        }
+
+        const css = StyleSheet.create({
+        body: {
+            flex: 1,
+            padding: 20,
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        })
+
+// Example 2:
+        import React, { Component } from 'react';
+        import { View, StyleSheet, Button, StatusBar, Modal } from 'react-native';
+
+        export default class app extends Component {
+
+            constructor(props){
+                super(props);
+
+                this.state = {
+                    statusStyle: 'dark-content',
+                    bgColor: 'white',
+                    visibleModal: false,
+                    modalBgColor: 'black'
+                }
+
+                this.modify = this.modify.bind(this);
+                this.openModal = this.openModal.bind(this);
+                this.closeModal = this.closeModal.bind(this);
+            }
+
+            modify(){
+                const state = this.state;
+                if(state.bgColor == 'black'){
+                state.bgColor = 'white'
+                state.statusStyle = 'dark-content'
+                } else {
+                state.bgColor = 'black'
+                state.statusStyle = 'light-content'
+                }
+                
+                this.setState(state);
+            }
+
+            openModal(){
+            let state = this.state;
+            state.visibleModal = true;
+            state.statusStyle = 'light-content';
+            this.setState(state);
+            }
+
+            closeModal(){
+            let state = this.state;
+            state.visibleModal = false;
+            state.statusStyle = 'dark-content'
+            this.setState(state);
+            }
+
+            //Temos uma propriedade no StatusBar chamada Hidden, onde escondemos o statusbar de nossa aplicação
+            render(){
+                return(
+                <View style={[css.body, { backgroundColor: this.state.bgColor } ]}>
+
+                    <StatusBar barStyle={this.state.statusStyle} />
+
+                    <Modal animationType='none' visible={this.state.visibleModal}>
+                        <View style={[css.modal, { backgroundColor: this.state.modalBgColor }]}>
+                            <Button title='Fechar Modal' onPress={this.closeModal}></Button> 
+                        </View>
+                    </Modal>
+
+                    <Button title='Abrir Modal' onPress={this.openModal}></Button>
+                </View>
+                );
+            }
+
+        }
+
+        const css = StyleSheet.create({
+            body: {
+                flex: 1,
+                padding: 20,
+                justifyContent: 'center',
+                alignItems: 'center',
+            },
+            modal: {
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center'
+            }
+        })
+
 =======================Project RGB==============================
             import React, { Component } from 'react';
             import { View, Text, StyleSheet, Slider } from 'react-native';
 
             export default class app extends Component {
 
-            constructor(props){
+                constructor(props){
 
-                super(props);
-                this.state = {
-                blue: 75,
-                green: 0,
-                red: 0,
-                backgroundColor: () => {
-                    return `rgba(${this.state.red}, ${this.state.green}, ${this.state.blue}, 1)`
-                }
-                }
-
-                this.css = StyleSheet.create({
-                    body: {
-                    flex: 1,
-                    paddingTop: 20,
-                    },
-                    sliderDiv: {
-                    flex: 1,
-                    justifyContent: 'center'
-                    },
-                    imageDiv: {
-                    flex: 1,
-                    backgroundColor: this.backgroundColor(this.state.red, this.state.green, this.state.blue)
-                    },
-                    slider: {
-                    margin: 10
+                    super(props);
+                    this.state = {
+                        blue: 75,
+                        green: 0,
+                        red: 0,
+                        bgColor: `rgba(0, 0, 75, 1)`
                     }
-                })
 
-                this.configColors = this.configColors.bind(this);
+                    this.configColors = this.configColors.bind(this);
+                }
 
-            }
+                configColors(newValue, typeColor){
 
-            backgroundColor (red, green, blue){
-                return `rgba(${red}, ${green}, ${blue}, 1)`;
-            }
+                    let state = this.state;
+                    if(typeColor == 'red'){
+                    state.red = newValue
+                    } else if (typeColor == 'green'){
+                    state.green = newValue
+                    } else if (typeColor == 'blue'){
+                    state.blue = newValue
+                    } 
 
-            configColors(newValue, typeColor){
+                    state.bgColor = `rgba(${state.red}, ${state.green}, ${state.blue}, 1)`
+                    this.setState(state);
+                    console.log(state);
+                    
+                }
 
-                let state = this.state;
-                if(typeColor == 'red'){
-                state.red = newValue
-                } else if (typeColor == 'green'){
-                state.green = newValue
-                } else if (typeColor == 'blue'){
-                state.blue = newValue
-                } 
+                render(){
+                    return(
+                    <View style={css.body}>
 
-                this.backgroundColor(state.red, state.green, state.blue);
+                        <Text style={{textAlign: 'center', fontSize: 18, marginTop: 5}}>RGB Colors</Text>
 
-                this.setState(state);
-                console.log(state);
-                
-            }
+                        <View style={css.statusDiv}>
+                            <Text style={css.textStatus}>Vermelho: {  (this.state.red.toFixed(0)) } </Text>
+                            <Text style={css.textStatus}>Verde: {this.state.green.toFixed(0)}</Text>
+                            <Text style={css.textStatus}>Azul: {this.state.blue.toFixed(0)}</Text>
+                        </View>
 
-            render(){
-                return(
-                <View style={this.css.body}>
+                        <View style={css.sliderDiv}>
 
-                    <Text style={{textAlign: 'center', fontSize: 18, marginTop: 5}}>RGB Colors</Text>
+                            
+                            <Slider style={ css.slider } value={this.state.red} minimumValue={0} maximumValue={255} onValueChange={(newValue) => { this.configColors(newValue, 'red') }} thumbTintColor='red' minimumTrackTintColor='red'/>
 
-                    <View style={this.css.sliderDiv}>
+                            <Slider style={ css.slider } value={this.state.green} minimumValue={0} maximumValue={255} onValueChange={(newValue) => { this.configColors(newValue, 'green') } } minimumTrackTintColor='green'/>
 
-                        <Slider style={ this.css.slider } value={this.state.red} minimumValue={0} maximumValue={255} onValueChange={(newValue) => { this.configColors(newValue, 'red') }}/>
+                            <Slider style={ css.slider } value={this.state.blue} minimumValue={0} maximumValue={255} onValueChange={(newValue) => { this.configColors(newValue, 'blue') }} minimumTrackTintColor='blue'/>
 
-                        <Slider style={ this.css.slider } value={this.state.green} minimumValue={0} maximumValue={255} onValueChange={(newValue) => { this.configColors(newValue, 'green') } } />
+                        </View>
 
-                        <Slider style={ this.css.slider } value={this.state.blue} minimumValue={0} maximumValue={255} onValueChange={(newValue) => { this.configColors(newValue, 'blue') }} />
+                        <View style={[css.imageDiv, {backgroundColor: this.state.bgColor} ]}>
+
+                        </View>
 
                     </View>
+                    );
 
-                    <View style={this.css.imageDiv}>
+                    
+                }
+                }
 
-                    </View>
-
-                </View>
-                );
+            const css = StyleSheet.create({
+            body: {
+                flex: 1,
+                paddingTop: 20,
+            },
+            sliderDiv: {
+                flex: 1,
+                justifyContent: 'center'
+            },
+            imageDiv: {
+                flex: 1,
+            },
+            slider: {
+                margin: 10
+            },
+            statusDiv: {
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: 50
+            },
+            textStatus: {
+                flex: 1,
+                textAlign: 'center'
             }
+            })
 
-            }
+=======================Async Storage==============================
+
+
+//Example 1:
+
