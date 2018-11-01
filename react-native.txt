@@ -1230,7 +1230,7 @@
             }
         })
 
-=======================Navegação (Biblioteca por fora (React-navigation))==============================
+=======================Stack Navigator (Biblioteca por fora (React-navigation))==============================
 
 //Example 1:
         import React, { Component } from 'react';
@@ -1392,3 +1392,264 @@
 
         export default Navigator;
 
+=======================Tab Navigation==============================
+
+/*
+    Tabulação de navegação são icones clickáveis que faz mudar a tela principal.
+    E estes icones clickáveis continuam fixos em suas posições sem trocar a tela por 
+    inteira.
+
+    O createBottomTabNavigator ou createTopNavigator funciona da mesma forma que o createStackNavigator,
+    mas com suas diferenças e personalizações
+
+*/
+
+//Example 1:
+
+    ===Arquivo App.js===
+          import React, { Component } from 'react';
+            import { createBottomTabNavigator } from 'react-navigation';
+            import { HomeScreen } from './src/components/HomeScreen';
+            import { ChatScreen } from './src/components/ChatScreen';
+
+            const Navigator = createBottomTabNavigator({
+            Home: {
+                screen: HomeScreen
+            },
+            Chat: {
+                screen: ChatScreen
+            }
+            });
+
+            export default Navigator;
+
+    ===Arquivo HomeScreen.js===
+            import React, { Component } from 'react';
+            import { TextInput, View, Button, StyleSheet, Image } from 'react-native';
+
+            export class HomeScreen extends Component {
+
+                static navigationOptions = ({navigation}) => ({
+                    tabBarLabel: 'Home',
+                    //Focused retorna true ou false caso a tela esteja ativa ou não
+                    tabBarIcon: ({tintColor, focused}) => {
+                        if(focused){
+                            return(
+                                <Image source={require('../../assets/images/home_on.png')} style={{width: 26, height: 26}} />
+                            )
+                        } else {
+                            return(
+                                <Image source={require('../../assets/images/home_off.png')} style={{width: 26, height: 26}} />
+                            )
+                        }
+                    }
+                });
+            
+                constructor(props){
+                    super(props);
+                    this.state = {
+                        name: ''
+                    }
+                }
+            
+                render(){
+                    return (
+                    <View style={css.body}>
+                        <TextInput style={css.input} underlineColorAndroid='transparent' placeholder='Nome do contato' onChangeText={ (name) => this.setState({name}) }></TextInput>
+                        <Button title='Tela de Chat' onPress={ () => {}}></Button>
+                    </View>
+                    );
+                }
+            }
+
+            const css = StyleSheet.create({
+                body: {
+                flex: 1,
+                backgroundColor: 'white',
+                justifyContent: 'center',
+                alignItems: 'center',
+                },
+                input: {
+                height: 45,
+                borderWidth: 1,
+                borderColor: '#E0E0E0',
+                borderRadius: 10,
+                padding: 5,
+                width: 200,
+                textAlign: 'center'
+                },
+            })
+
+    
+    ===Arquivo ChatScreen.js===
+            import React, { Component } from 'react';
+            import { View, Text, StyleSheet, Image } from 'react-native';
+
+            export class ChatScreen extends Component {
+
+                static navigationOptions = ({navigation}) => ({
+                    tabBarLabel: 'Chat',
+                    //Focused retorna true ou false caso a tela esteja ativa ou não
+                    tabBarIcon: ({tintColor, focused}) => {
+                        if(focused){
+                            return(
+                                <Image source={require('../../assets/images/chat_on.png')} style={{width: 26, height: 26}} />
+                            )
+                        } else {
+                            return(
+                                <Image source={require('../../assets/images/chat_off.png')} style={{width: 26, height: 26}} />
+                            )
+                        }
+                    }
+                });
+
+                render(){
+                return (
+                    <View style={css.body}>
+                    <Text style={css.txt}>Olá, Matheus</Text>
+                    </View>      
+                )
+                }
+            }
+
+            const css = StyleSheet.create({
+                body: {
+                flex: 1,
+                backgroundColor: 'white',
+                justifyContent: 'center',
+                alignItems: 'center'
+                },
+                txt: {
+                fontSize: 25
+                }
+            })
+
+=======================Drawer Navigator==============================
+
+/*
+
+    Drawer navigator é a barra lateral que puxamos para o lado ou acionamos
+    com um botão 
+
+*/
+
+//Example 1:
+
+    ===Arquivo app.js===
+            import React, { Component } from 'react';
+            import { createDrawerNavigator } from 'react-navigation';
+            import { HomeScreen } from './src/components/HomeScreen';
+            import { ChatScreen } from './src/components/ChatScreen';
+
+            const Navigator = createDrawerNavigator({
+            Home: {
+                screen: HomeScreen
+            },
+            Chat: {
+                screen: ChatScreen
+            }
+            });
+
+            export default Navigator;
+            
+    ===Arquivo HomeScreen.js===      
+            import React, { Component } from 'react';
+            import { TextInput, View, Button, StyleSheet, Image } from 'react-native';
+
+            export class HomeScreen extends Component {
+
+                static navigationOptions = ({navigation}) => ({
+                    drawerLabel: 'Home',
+                    //Focused retorna true ou false caso a tela esteja ativa ou não
+                    drawerIcon: ({ tintColor, focused }) => {
+                        if(focused){
+                            return(
+                                <Image source={require('../../assets/images/home_on.png')} style={{width: 26, height: 26}} />
+                            )
+                        }else {
+                            return(
+                                <Image source={require('../../assets/images/home_off.png')} style={{width: 26, height: 26}} />
+                            )
+                        }
+                    } 
+                });
+            
+                constructor(props){
+                    super(props);
+                    this.state = {
+                        name: ''
+                    }
+                }
+            
+                render(){
+                    return (
+                    <View style={css.body}>
+                        <TextInput style={css.input} underlineColorAndroid='transparent' placeholder='Nome do contato' onChangeText={ (name) => this.setState({name}) }></TextInput>
+
+                        <Button title='Abrir drewerNavigator' onPress={ () => this.props.navigation.toggleDrawer()}></Button>
+                    </View>
+                    );
+                }
+            }
+
+            const css = StyleSheet.create({
+                body: {
+                flex: 1,
+                backgroundColor: 'white',
+                justifyContent: 'center',
+                alignItems: 'center',
+                },
+                input: {
+                height: 45,
+                borderWidth: 1,
+                borderColor: '#E0E0E0',
+                borderRadius: 10,
+                padding: 5,
+                width: 200,
+                textAlign: 'center'
+                },
+            })
+
+    ===Arquivo ChatScreen.js===      
+            import React, { Component } from 'react';
+            import { View, Text, StyleSheet, Image, Button } from 'react-native';
+
+            export class ChatScreen extends Component {
+
+                static navigationOptions = ({navigation}) => ({
+                    drawerLabel: 'Chat',
+                    //Focused retorna true ou false caso a tela esteja ativa ou não
+                    drawerIcon: ({ tintColor, focused }) => {
+                        if(focused){
+                            return(
+                                <Image source={require('../../assets/images/chat_on.png')} style={{width: 26, height: 26}} />
+                            )
+                        } else {
+                            return(
+                                <Image source={require('../../assets/images/chat_off.png')} style={{width: 26, height: 26}} />
+                            )    
+                        }
+                    }
+                });
+
+                render(){
+                return (
+                    <View style={css.body}>
+                    <Text style={css.txt}>Olá, Matheus</Text>
+                    <Button title='Abrir drewerNavigator' onPress={ () => this.props.navigation.toggleDrawer()}></Button>
+                    </View>      
+                )
+                }
+            }
+
+            const css = StyleSheet.create({
+                body: {
+                flex: 1,
+                backgroundColor: 'white',
+                justifyContent: 'center',
+                alignItems: 'center'
+                },
+                txt: {
+                fontSize: 25
+                }
+            })

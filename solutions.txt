@@ -1,0 +1,32 @@
+=======================Voltando para o inicio de uma navegação ==============================
+
+//Example: 
+    static navigationOptions = ({navigation}) => ({
+        header: null
+    });
+
+    constructor(props){
+        super(props);
+        this.goBackScreen = this.goBackScreen.bind(this);
+    }
+  
+    //Voltando para uma tela especifíca e resetando histórico
+    goBackScreen(){
+        this.props.navigation.popToTop();
+    }
+
+======================= Personalização do cabeçalho do Stack Navigation ==============================
+const navigator = createStackNavigator({
+  Screen1: {
+    screen: Screen1
+  },
+  Screen2: {
+    screen: Screen2
+  }
+}, {
+  'headerMode': 'none'
+})
+
+======================= Iniciando um tab navigation por padrão em outra tela específica ==============================
+
+
