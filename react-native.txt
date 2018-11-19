@@ -1189,7 +1189,7 @@
                 name: ''
                 }
 
-                //Assincrono, quando ele pegar o nome ele fará a sua execução, ou seja, o resto do código continua rodando
+                //Assincrono, quando ele pegar o nome ele fará a sua execução, ou seja, o resto do código continua rodando.
                 AsyncStorage.getItem('name').then(value => {
                 this.setState({name: value});
                 });
@@ -1653,3 +1653,172 @@
                 fontSize: 25
                 }
             })
+
+=======================Requisição com Fetch==============================
+
+
+//Example: 1 
+        import React, { Component } from 'react';
+        import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
+
+        //Component
+        class Filme extends Component {
+        render(){
+            return(
+            <View style={css.areaFilme}>
+                <Image source={ {uri: this.props.data.poster.replace('http:', 'https:')} } style={css.imageFilme}/>
+                <View style={css.areaInfo}>
+                    <Text style={css.title}>{this.props.data.titulo}</Text>
+                    <Text style={css.genre}>{this.props.data.genero}</Text>
+                </View>
+            </View>
+            )
+        }
+        }
+
+        //Main Component
+        export default class App extends Component {
+
+        constructor(props){
+            super(props);
+            this.state = {
+            filmes: '',
+            loading: true
+            }
+
+            //Fetch é um método Javascript no qual facilita requisições de servidores
+            fetch('https://filmespy.herokuapp.com/api/v1/filmes')
+            //Then transforma os dados em Json
+            .then((data) => data.json())
+            //Then seta o state com os dados;
+            .then((data) => {
+            let state = this.state;
+            state.filmes = data.filmes;
+            state.loading = false;
+            this.setState(state);
+            });
+
+        }
+
+        //O keyExtractor pega um ponto de referência do itens como referência, neste caso estamos pegando o titulo.
+        render()
+        {
+            if(this.state.loading)
+            {
+                return(
+                    <View style={css.areaLoading}>
+                    <Text style={css.txtLoading}>Carregando</Text>
+                    </View>
+                );
+            } 
+
+            else 
+            {
+                return(
+                    <View style={css.body}>
+                    <FlatList data={this.state.filmes} renderItem={({item}) => <Filme data={item} /> } keyExtractor={(item, index) => item.titulo} >
+            
+                    </FlatList>
+                    </View>
+                )
+            }
+        }
+
+        }
+
+        const css = StyleSheet.create({
+
+        body: {
+            flex: 1,
+            marginTop: 20,
+        },
+        areaFilme: {
+            flex: 1,
+            flexDirection: 'row',
+        },
+        imageFilme: {
+            width: 140,
+            height: 110,
+            margin: 10
+        },
+        areaInfo: {
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center'
+        },
+        title: {
+            fontSize: 15,
+            fontWeight: 'bold',
+            marginRight: 5
+        },
+        areaLoading: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        txtLoading: {
+            fontSize: 24,
+            fontWeight: 'bold'
+        }
+        })
+
+//Example: 2
+
+
+
+
+import React from 'react';
+import { StyleSheet, FlatList, View, Text } from 'react-native';
+import { ListItem } from 'react-native-elements'
+
+export default class List extends React.Component {
+
+	constructor(props){
+		super(props);
+		this.state = {
+		  list: [
+			  {
+				name: 'Amy Farha',
+				avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+				subtitle: 'Vice President'
+			  },
+			  {
+				name: 'Chris Jackson',
+				avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+				subtitle: 'Vice Chairman'
+			  },
+			]
+		}
+	}
+  
+  
+	renderList(item){
+	  return(
+		<ListItem 
+		  roundAvatar
+		  title={item.name}
+		  subtitle={item.subtitle}
+		  avatar={{uri:item.avatar_url}}
+		/>
+	  )
+	}
+  
+	render(){
+	  return(
+		<List containerStyle={styles.container}>
+			<FlatList 
+			  data={ this.state.list } 
+			  renderItem={ ({item}) => {return this.renderList(item)} } 
+			  keyExtractor={ (item, index) => item.name } 
+			/>
+		</List>
+	  )
+	}
+
+}
+
+const styles = StyleSheet.create({
+	container: {
+	  marginTop: 20
+	}
+  })

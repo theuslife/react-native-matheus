@@ -1,0 +1,118 @@
+======================= Axios, Async/Await e Requisições com React-Native ==============================
+
+//Example 1: Get and Post
+            import React from 'react';
+            import { StyleSheet, Text, View , ScrollView, Button, TextInput} from 'react-native';
+            import { ListItem } from 'react-native-elements';
+            import Axios from 'axios';
+
+            export default class App extends React.Component {
+
+            constructor(props){
+                    super(props);
+                    this.state = {
+                        list: [],
+                        inputValue: ''
+                    }
+
+                    this.getItems();
+                }
+
+
+            getItems = async () => {
+                const response = await Axios.get('https://b7web.com.br/todo/17824')
+                this.setState({list: response.data.todo});
+            }
+            
+            addItems = async () => {
+                const response = await Axios.post('https://b7web.com.br/todo/17824', {
+                    item: this.state.inputValue
+                });
+                console.log(response.data);
+                this.getItems();
+                this.setState({inputValue: ''});
+            }
+
+            deleteItems = async () => {
+
+            }
+
+            render() {
+
+                    var data =  this.state.list.map((element, index) => 
+                        <ListItem 
+                            key={index}
+                            title={element.item}
+                            checkmark={true}
+                            subtitle={element.id}
+                        />
+                    )
+
+                    return (
+                        <View style={styles.container}>
+
+                        <View style={styles.topArea}>
+                            <Text style={styles.txtTopArea}> Adicione uma nova tarefa :) </Text>
+                            <TextInput 
+                                style={styles.input} 
+                                onChangeText={(value) => {this.setState({inputValue: value})}}
+                                value={this.state.inputValue}  
+                                />
+                            <Button 
+                                onPress={() => {this.addItems()}} 
+                                title='Adicionar'>
+                            </Button>
+                        </View>
+
+                        <ScrollView style={styles.list}>
+                            {data}
+                        </ScrollView>
+                        </View>
+                );
+                }
+            }
+
+
+            const styles = StyleSheet.create({
+            container: {
+                flex: 1,
+                marginTop: 20,
+
+            },
+            list: {
+                flex: 1,
+            },
+            topArea: {
+                marginTop: 20,
+                height: 135,
+                alignItems: 'center'
+            },
+            txtTopArea: {
+                textAlign: 'center',
+                fontSize: 16,
+            },
+            input: {
+            height: 40,
+            borderBottomWidth: 1,
+            width: 200,
+            borderRadius: 20,
+            padding: 10
+            }
+            });
+
+//Example 2: Get and Post
+
+
+======================= NoSQL (Firebase) ==============================
+
+/*
+
+O banco de dados do firebase e NoSQL
+
+O Firebase e real time, logo ele somente atualiza quando uma informacao nova e jogada.
+
+Em um banco relacional as coisas acontecem diferentes, o servidor fica requisitando a cada x segundos
+para verificar se ha alguma nova.
+
+
+*/===
