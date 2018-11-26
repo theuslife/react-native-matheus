@@ -114,5 +114,31 @@ O Firebase e real time, logo ele somente atualiza quando uma informacao nova e j
 Em um banco relacional as coisas acontecem diferentes, o servidor fica requisitando a cada x segundos
 para verificar se ha alguma nova.
 
+Ele não é autoincrement, o suposto `id` é uma código gerado automaticamente
 
-*/===
+*/
+
+Example 1:
+        const config = {
+                apiKey: "AIzaSyABY_gqgn4sWokc0PFFkTasvUTTdHc9Nvo",
+                authDomain: "test-project-d873d.firebaseapp.com",
+                databaseURL: "https://test-project-d873d.firebaseio.com",
+                projectId: "test-project-d873d",
+                storageBucket: "test-project-d873d.appspot.com",
+                messagingSenderId: "572370314713"
+            };
+
+            firebase.initializeApp(config);
+
+            //Pegue do database o nó `nome` e fique escutando se há modificacões
+            
+            // Listener (ouvinte)
+            // firebase.database().ref(`usuarios/1/nome` ).on(`value`, (snapshot) => {
+            //     this.setState({name: snapshot.val()});
+            // });
+
+            // Carrega uma vez
+            firebase.database().ref(`usuarios/1`).once(`value`).then((snapshot) => {
+                this.setState({name: snapshot.val().nome, age: snapshot.val().idade});
+                }
+            );

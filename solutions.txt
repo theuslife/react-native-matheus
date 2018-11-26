@@ -3,6 +3,8 @@
 Você pode impedir que a linha de um componente TEXT ultrapasse mais que um determinado valor
 com a propriedade numberOfLines
 
+Você pode deixar o title de um navigation dinamico passando props para ele
+
 */
 
 
