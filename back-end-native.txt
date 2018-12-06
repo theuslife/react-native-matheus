@@ -119,17 +119,6 @@ Ele não é autoincrement, o suposto `id` é uma código gerado automaticamente
 */
 
 Example 1:
-        const config = {
-                apiKey: "AIzaSyABY_gqgn4sWokc0PFFkTasvUTTdHc9Nvo",
-                authDomain: "test-project-d873d.firebaseapp.com",
-                databaseURL: "https://test-project-d873d.firebaseio.com",
-                projectId: "test-project-d873d",
-                storageBucket: "test-project-d873d.appspot.com",
-                messagingSenderId: "572370314713"
-            };
-
-            firebase.initializeApp(config);
-
             //Pegue do database o nó `nome` e fique escutando se há modificacões
             
             // Listener (ouvinte)
@@ -142,3 +131,113 @@ Example 1:
                 this.setState({name: snapshot.val().nome, age: snapshot.val().idade});
                 }
             );
+
+Example: 2 - Inserindo novo usuario em um nó
+
+insertUser(){
+    if(this.state.name.length > 0){
+
+        //Pegue o documento úsuarios
+        let user = firebase.database().ref('usuarios');
+
+        //Gere uma chave única
+        let key = user.push().key;
+
+        //Acessa os dados filho de um nó e configure com tais informações
+        user.child(key).set({
+            nome: this.state.name,
+            idade: this.state.age
+        });
+
+        //
+
+        alert('Usuario inserido')
+        
+    }
+
+}
+
+Example: 3 - Inserindo novo dado e Deletando
+
+            //Para inserir um novo dado em um nó é necessário gerar uma nova chave
+            let user = firebase.database();
+            let key = user.push().key;
+
+            //Atualizando dados
+            firebase.database().ref('usuarios').child('2').set({
+                idade: 22,
+                nome: 'Jennifer'
+            });
+
+            //Deletando dados
+                firebase.database().ref('usuarios').child('1').remove()
+
+Example: 4 - Listagem
+        //Pegando dados do usuario para listagem. O on deixa realtime, e o once sem realtime desta prop
+        firebase.database().ref('usuarios').on('value', ( snapshot ) => {
+                const { list } = this.state;
+
+                //ChildItem vai ser um objeto contendo cada Key
+                snapshot.forEach((childItem) => {
+                list.push({
+                    key: childItem.key,
+                    nome: childItem.val().nome,
+                    idade: childItem.val().idade
+                })
+                })
+                this.setState({list: list});
+        })
+
+        let id = '-LSGb5BvMHlDPyCIDrB6'
+
+        firebase.database().ref(`usuarios/${id}`).remove()
+
+======================= Firebase - Auth ==============================
+
+Example 1: Registrando
+
+        register(){
+
+            firebase.auth().createUserWithEmailAndPassword(
+                this.state.email, 
+                this.state.password
+            ).catch((error) => {
+                //error code
+                //error message
+                alert(error.message);
+            });
+
+        }
+
+Example 2 : Logando
+        login = () => {
+
+            //Logando user
+            firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+            .catch((error) => {
+            if(error.code == 'auth/wrong-password'){
+                alert('senha errada');
+            } else {
+                alert('tente novamente mais tarde');
+            }
+            });
+        }
+
+Example 3: Deslogin
+
+            deslogin = () => {
+                firebase.auth().signOut();
+            }
+
+Example 4 : Verifica mudanças de auth e retorna dados das modificacões
+    
+        // Qualquer mudança em algum dado de autenticação os dados do usuário vem para aqui
+        firebase.auth().onAuthStateChanged((user) => {
+                if(user){
+                    //Logado
+                    alert('Usuario logado');
+                } else {
+                    //Deslogado
+                    alert('Você está deslogado');
+                }
+            });
