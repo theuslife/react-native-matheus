@@ -280,3 +280,119 @@ Example 2 : Logando usuario e mostrando seus dados
         }
 
         })
+
+Example 3 : Todo simples com usuarios autenticados
+
+======================= Firebase - Todo simples com usuarios autenticados ==============================
+
+Example: 
+
+        export default class App extends React.Component {
+
+        constructor(props) {
+            super(props)
+
+            this.state = {
+            email: null,
+            password: null,
+            uid: null,
+            addItemTxt: null,
+            listData: []
+            }
+
+            //Deslogar
+            firebase.auth().signOut();
+
+
+            firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                //Logado
+                this.setState({ uid: user.uid });
+
+                //Boas-vindas
+                firebase.database().ref('usuarios').child(user.uid).once('value').then((snapshot) => {
+                const name = snapshot.val().nome;
+                alert(`Seja bem vindo: ${name}`);
+                })
+
+                //Cria nova tarefa, gera um hash UID e retorna dados para nossa aplicação
+                firebase.database().ref('todo').child(user.uid).on('value', (snapshot) => {
+
+                const listData = []
+                snapshot.forEach((element, index) => {
+                    listData.push({
+                    titulo: element.val().titulo,
+                    key: element.val().titulo
+                    });
+                })
+
+                this.setState({listData: listData});
+
+                })
+            } else {
+                alert('Você está deslogado');
+            }
+            })
+
+        }
+
+        addTasks = () => {
+            
+            if(this.state.uid != null && this.state.addItemTxt != null ){
+                
+                const todo = firebase.database().ref('todo').child(this.state.uid);
+                const key = todo.push().key;
+                todo.child(key).set({
+                titulo: this.state.addItemTxt
+                });
+            }
+
+        }
+
+        login = () => {
+
+            if(this.state.email != null && this.state.password != null){
+            firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+                .catch((error) => {
+                alert(error.code);
+                });
+            } else {
+            alert('Informações Inválidas');
+            }
+
+        }
+
+
+        render() {
+
+            return (
+            <View style={styles.container}>
+                <View style={styles.topArea}>
+                <Text style={{ marginBottom: 50, fontSize: 26, fontWeight: 'bold' }}>Tela de Login </Text>
+
+                <Text>E-mail: </Text>
+                <TextInput autoCapitalize='none' style={styles.input} onChangeText={(emailInput) => this.setState({ email: emailInput })} />
+
+                <Text >Password: </Text>
+                <TextInput secureTextEntry={true} style={styles.input} onChangeText={(passwordInput) => this.setState({ password: passwordInput })} />
+                
+                <Button onPress={() => { this.login() }} title='Cadastrar' ></Button>
+
+                <View style={styles.addArea}>
+                    <Text>Adicionar Tarefa</Text>
+                    <TextInput style={styles.input} onChangeText={(addItemTxt) => this.setState({addItemTxt: addItemTxt})}></TextInput>
+                </View>
+
+                <View style={{ flexDirection: 'row' }}>
+                    <Button onPress={() => { this.addTasks() }} title='Adicionar'></Button>
+                    <Button title='Remover' onPress={() => { this.deleteTasks() }}></Button>
+                </View>
+
+                <FlatList data={this.state.listData} renderItem={({item}) => <Text>{item.titulo}</Text>}  />
+
+                </View>
+            </View>
+            );
+
+        }
+        }
