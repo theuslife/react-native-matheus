@@ -103,7 +103,7 @@
 //Example 2: Get and Post
 
 
-======================= NoSQL (Firebase) ==============================
+======================= Firebase - Databse ==============================
 
 /*
 
@@ -231,7 +231,7 @@ Example 3: Deslogin
 
 Example 4 : Verifica mudanças de auth e retorna dados das modificacões
     
-        // Qualquer mudança em algum dado de autenticação os dados do usuário vem para aqui
+        // Qualquer mudança em algum dado de autenticação os dados do usuário vem para aqui (Apos cadastrar o user loga automaticamente)
         firebase.auth().onAuthStateChanged((user) => {
                 if(user){
                     //Logado
@@ -241,3 +241,42 @@ Example 4 : Verifica mudanças de auth e retorna dados das modificacões
                     alert('Você está deslogado');
                 }
             });
+
+======================= Firebase - Auth and Database together ==============================
+
+Example 1 : Inserindo novo usuario registrado pelo auth
+
+    //Função
+        register = () => {
+            firebase.auth().createUserWithEmailAndPassword(
+            this.state.email, this.state.password
+            ).catch((error) => {
+            console.log(error.code);
+            })
+        }
+
+    //No Constructor
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                //Entao criamos um nó usuarios, onde recebe um hash id e configura o nome deste usuario
+                firebase.database().ref('usuarios').child(user.uid).set({
+                nome: this.state.name
+                })
+            } else {
+
+            }
+        })
+
+Example 2 : Logando usuario e mostrando seus dados
+
+        firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            firebase.database().ref('usuarios').child(user.uid).once('value').then((snapshot) => {
+            const name = snapshot.val().nome;
+            alert(`Seja bem vindo ao nosso sistema ${name}! `);
+            })
+        } else {
+            alert('Deslogado');
+        }
+
+        })
