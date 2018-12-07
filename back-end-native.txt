@@ -303,7 +303,6 @@ Example:
             //Deslogar
             firebase.auth().signOut();
 
-
             firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 //Logado
@@ -396,3 +395,39 @@ Example:
 
         }
         }
+
+======================= DAO - Firebase ==============================
+
+Example: 
+
+        import firebase from './firebaseconnection';
+
+        class Firebase {
+
+            logout(){
+                firebase.auth().signOut();
+            }
+
+            addAuthListener(callback){
+                firebase.auth().onAuthStateChanged(callback)
+            }
+
+            login(email, password){
+                return firebase.auth().signInWithEmailAndPassword(email, password)
+            }
+
+            getUser(callback){
+                firebase.database().ref('usuarios').child(firebase.auth().currentUser.uid).once('value').then(callback);
+            }
+
+        }
+
+        export default new Firebase();
+
+======================= App offline ==============================
+
+/* 
+
+netInfo: É um componente do React Native para verrificar conexão do usuario e diversas informacoes de conectividade, com isto podemos manipular o aplicativo tanto offline quanto online.
+
+*/
