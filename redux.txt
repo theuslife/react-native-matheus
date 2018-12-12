@@ -157,4 +157,27 @@
             export { AuthReducer }
             export default AuthReducer;
 
+======================= Async Redux ==============================
 
+Example 1:
+
+/*
+
+    Criamos uma const mapDispatchToProps que vai como segundo parâmetro 
+    na nossa connection, a partir dela mandamos o dispatch. Lembrando
+    de importar o bindActionCreators do 'redux'. Mandamos as funções 
+    nas quais terão retorno assincrono, ou seja, nosso payload é uma promise
+    enviada para os reducers.
+
+*/
+
+
+ --- Componente ---
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({ buscarImoveis, changeView }, dispatch);
+};
+
+ --- Reducer ---
+if(action.payload.data.success){
+        return { ...state, data: action.payload.data.data, total_imoveis: action.payload.data.total_imoveis };
+} 
