@@ -1,0 +1,160 @@
+======================= Redux ==============================
+
+/*
+
+    Redux são dados globais nos quais podemos armazenar informações, logo o Redux
+    ajuda na troca dessas informações entre os componentes. Facilitando a comunicação
+    entre telas.
+
+    Store = Biblioteca, fica na raiz de nossa aplicação. É onde os dados são armazenados, logo
+    ele sobrepoe toda nosso sistema para que todas as telas possam ter acesso as informações do store.
+
+    Actions = É onde após alguma ação disparar ele mandar os dados de resposta nas quais podem ser assincronas (utilizando a biblioteca redux-promise)
+    e então manda estas informações para os reducers
+
+    Reducers = Manipula a informação recebida, configura as variáveis com os dados das ações e manda para o store
+
+*/
+
+=== Example 1 : Recuperando dados da store ===
+
+     --Login.js--
+                import { connect } from 'react-redux';
+
+                //Recebe informações do store e disponibiliza para o nosso componente
+                const mapStateToProps = (state) => {
+                return {
+                    auth: state.auth
+                }
+                };
+
+                //Faz a conexão da store e nosso componente
+                export default connect(mapStateToProps)(Login);
+
+    --reducers.js--
+                import { combineReducers } from 'redux';
+                import AuthReducer from './authReducer'
+
+                //Combina todos os reducers
+                export default combineReducers({
+                    auth: AuthReducer
+                });
+
+    --authReducer.js--
+
+                //Dados iniciais do nosso state
+                const initialState = {
+                    email: 'Teste',
+                    password: '123'
+                }
+
+                const AuthReducer = (state = [], action) => {
+                    if(state.length == 0){
+                        return initialState;
+                    }
+
+                    return state;
+                }
+
+                export { AuthReducer }
+                export default AuthReducer;
+
+    --app.js--
+                import React, { Component } from 'react'
+                import { createStackNavigator, createAppContainer } from 'react-navigation';
+                import { createStore, applyMiddleware } from 'redux';
+                import { Provider } from 'react-redux';
+                import ReduxPromise  from 'redux-promise'
+                import Reducers  from './src/Reducers'
+
+                import Home from './src/home';
+                import Register from './src/register';
+                import Login from './src/login';
+
+                == Redux Promise ajuda a mandar requições assincronas para nossas actions e ter estes dados na disponível na store == 
+                const createStoreWithMiddleware = applyMiddleware(ReduxPromise)(createStore);
+
+                const store = createStoreWithMiddleware(Reducers);
+
+                const Navigator = createStackNavigator({
+                    Home,
+                    Register,
+                    Login
+                })
+
+                const AppContainer = createAppContainer(Navigator);
+
+                export default class App extends Component {
+                    render() {
+                        return (
+                            <Provider store={store}>
+                                <AppContainer />
+                            </Provider>
+                        )
+                    }
+                }
+
+=== Example 2: Modificando dados através das actions ===
+
+    --  login.js --
+            import { editEmail, editPassword } from './actions';
+            <TextInput style={styles.input} defaultValue={this.props.auth.email} onChangeText={(email) => {
+                this.props.editEmail(email);
+            }} />
+
+            /*
+
+                O editEmail logo se transforma em uma funcão disponivel
+                para nosso componente, onde passamos parametro para ele
+                e assim a action faz as modificações 
+
+            */
+
+            export default connect(mapStateToProps, { editEmail, editPassword })(Login);
+
+    -- index.js (action)  --
+            export const editEmail = (email) => {
+                //Retorno da ação
+                return {
+                    type: 'EDIT_EMAIL',
+                    payload: {
+                        email: email
+                    }
+                }
+
+            }
+
+            export const editPassword = (password) => {
+
+                return {
+                    type: 'EDIT_PASSWORD',
+                    payload: {
+                        password: password
+                    }
+                }
+
+            }
+    -- authReducer.js -- 
+            const initialState = {
+                email: '',
+                password: ''
+            }
+
+            const AuthReducer = (state = initialState, action) => {
+                switch(action.type){
+                    case 'EDIT_EMAIL' :
+                        //=== os tres pontos state, pega o state e acrescenta os demais parametros===
+                        return {...state, email: action.payload.email}
+                        break;
+                    case 'EDIT_PASSWORD':
+                        return {...state, password: action.payload.password}
+                        break;
+                    default: 
+                        return state;
+                }
+            }
+
+            export { AuthReducer }
+            export default AuthReducer;
+
+

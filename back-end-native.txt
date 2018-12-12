@@ -431,3 +431,15 @@ Example:
 netInfo: É um componente do React Native para verrificar conexão do usuario e diversas informacoes de conectividade, com isto podemos manipular o aplicativo tanto offline quanto online.
 
 */
+
+======================= Firebase - Storage ==============================
+
+/*
+
+Firebase Storage funciona como um NoSQL database do próprio firebase, onde revenciamos a pasta e o arquivo que queremos importar ou exportar
+
+*/
+
+Example 1:
+
+        let images = firebase.storage().ref().child('assets/images');
