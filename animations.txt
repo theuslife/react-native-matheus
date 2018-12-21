@@ -1,0 +1,60 @@
+=======================  Animações no React Native ==============================
+
+/*
+
+    Há um componente do React Native chamado animated, no qual
+    permite fazermos animações personalizadas ao nosso gosto
+
+*/
+
+
+Example 1: 
+
+        this.state = {
+        widthRet: new Animated.Value(250),
+        heightRet: new Animated.Value(50)
+        }
+
+        //Configuração da animação
+        Animated.timing(
+        this.state.heightRet,
+        {
+            toValue: 500,
+            duration: 1000
+        }
+        ).start();
+
+    }
+
+    render() {
+        return (
+        <View style={styles.container}>
+            <Animated.View
+            style={{ width: this.state.widthRet, height: this.state.heightRet, backgroundColor: '#000000',
+            }}
+            >
+            <Text style={{ color: 'white', textAlign: 'center', padding: 10, fontSize: 24 }}>Hello</Text>
+            </Animated.View>
+        </View>
+        );
+    }
+
+=======================  Animação sequencial ==============================
+
+Exemplo: 
+    Animated.sequence([
+      Animated.timing(
+        this.state.heightRet,
+        {
+          toValue: 100,
+          duration: 2000
+        }
+      ),
+      Animated.timing(
+        this.state.widthRet,
+        {
+          toValue: 100,
+          duration: 2000
+        }
+      )
+    ]).start()

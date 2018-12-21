@@ -171,13 +171,14 @@ Example 1:
 
 */
 
+        --- Componente ---
+        const mapDispatchToProps = (dispatch) => {
+            return bindActionCreators({ buscarImoveis, changeView }, dispatch);
+        };
 
- --- Componente ---
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ buscarImoveis, changeView }, dispatch);
-};
-
- --- Reducer ---
-if(action.payload.data.success){
-        return { ...state, data: action.payload.data.data, total_imoveis: action.payload.data.total_imoveis };
-} 
+        --- Reducer ---
+        if(action.payload.data.success){
+                return { ...state, data: action.payload.data.data, total_imoveis: action.payload.data.total_imoveis };
+        } else {
+            //do another thing...
+        }

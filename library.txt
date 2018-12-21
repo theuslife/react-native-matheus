@@ -1,0 +1,15 @@
+/* 
+
+Componentes e bibliotecas legais para se usar
+
+React Native Elements - UI bem otimizada e legal para uso e com boa documentação
+
+React Native Swiper - Deslize de fotos e telas de maneira fluida e diferente
+
+React Native floating-action - Botão personalizado onde clickado abre um design de opçoes que o usuário pode acessar (Isto ocupando pouco espaço da tela o que é excelente)
+
+React Native Modal - Modal com funções mais aprimoradas e melhores de serem utilizadas
+
+React Native Keyboard Aware Scroll View - Avoid the View e ScrollView Componentes que ajuda nas funcionalidades dos textinputs
+
+*/
